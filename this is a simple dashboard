@@ -1,0 +1,89 @@
+import pandas as pd
+
+def load_data(file_path, file_format='csv', **kwargs):
+    """
+    Load data from file.
+
+    Args:
+        file_path (str): Path to the file.
+        file_format (str): Format of the file. Default is 'csv'.
+        **kwargs: Additional keyword arguments to pass to the Pandas read function.
+
+    Returns:
+        DataFrame: Loaded data.
+    """
+    if file_format.lower() == 'csv':
+        return pd.read_csv(file_path, **kwargs)
+    elif file_format.lower() == 'excel':
+        return pd.read_excel(file_path, **kwargs)
+    elif file_format.lower() == 'database':
+        # Add database connection and query logic here
+        pass
+    else:
+        raise ValueError("Unsupported file format.")
+
+def clean_data(data):
+    """
+    Clean the loaded data.
+
+    Args:
+        data (DataFrame): Raw data.
+
+    Returns:
+        DataFrame: Cleaned data.
+    """
+    # Perform cleaning tasks such as removing duplicates, handling missing values, etc.
+    cleaned_data = data.drop_duplicates().dropna()
+    return cleaned_data
+
+def preprocess_data(data):
+    """
+    Preprocess the cleaned data.
+
+    Args:
+        data (DataFrame): Cleaned data.
+
+    Returns:
+        DataFrame: Preprocessed data.
+    """
+    # Perform preprocessing tasks such as feature engineering, normalization, etc.
+    preprocessed_data = data.copy()
+    # Example: Convert categorical variables to numerical using one-hot encoding
+    preprocessed_data = pd.get_dummies(preprocessed_data)
+    return preprocessed_data
+
+def save_data(data, file_path, file_format='csv', **kwargs):
+    """
+    Save data to file.
+
+    Args:
+        data (DataFrame): Data to be saved.
+        file_path (str): Path to save the file.
+        file_format (str): Format of the file. Default is 'csv'.
+        **kwargs: Additional keyword arguments to pass to the Pandas to_csv function.
+    """
+    if file_format.lower() == 'csv':
+        data.to_csv(file_path, index=False, **kwargs)
+    elif file_format.lower() == 'excel':
+        data.to_excel(file_path, index=False, **kwargs)
+    elif file_format.lower() == 'database':
+        # Add database connection and save logic here
+        pass
+    else:
+        raise ValueError("Unsupported file format.")
+
+def main():
+    # Load raw data
+    raw_data = load_data("raw_data.csv")
+
+    # Clean data
+    cleaned_data = clean_data(raw_data)
+
+    # Preprocess data
+    preprocessed_data = preprocess_data(cleaned_data)
+
+    # Save preprocessed data
+    save_data(preprocessed_data, "preprocessed_data.csv")
+
+if __name__ == "__main__":
+    main()
